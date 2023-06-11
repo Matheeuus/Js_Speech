@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reconhecimento de Voz - Pesquisa no Google</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(120deg, #d584fa, #39379e);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      color: #302f2f;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      background-color: #4846d6;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #1c1181;
+    }
+  </style>
+</head>
+<body>
+  <h1>Reconhecimento de Voz - Pesquisa no Google</h1>
+  
+  <button id="startBtn">Pesquisar</button>
+
+  <script>
+    document.getElementById('startBtn').addEventListener('click', () => {
+      if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.continuous = false;
+        recognition.lang = 'pt-BR';
+
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          console.log('Transcrição:', transcript);
+
+         
+          const searchQuery = transcript.trim().replace(' ', '+');
+          const searchUrl = `https://www.google.com/search?q=${searchQuery}`;
+          window.open(searchUrl, '_blank');
+        };
+
+        recognition.onerror = (event) => {
+          console.error('Erro de reconhecimento de voz:', event.error);
+        };
+
+        recognition.start();
+      } else {
+        console.error('API de reconhecimento de voz não é suportada neste navegador.');
+      }
+    });
+  </script>
+</body>
+</html>
